@@ -75,7 +75,13 @@ WSGI_APPLICATION = 'calorieproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-if config('POSTGRES_DB', default=''):
+database_url = config('DATABASE_URL', default='')
+
+if database_url:
+    DATABASES = {
+        'default': dj_database_url.parse(database_url)
+    }
+elif config('POSTGRES_DB', default=''):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
