@@ -1,0 +1,33 @@
+{% extends 'caloriecounter/base.html' %}
+
+{% block content %}
+<section class="card">
+    <h1>Calorie Counter</h1>
+    <p class="intro">Add foods eaten today and track your total calories.</p>
+
+    <form method="post" class="food-form">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Food name" required>
+        <input type="number" name="calories" placeholder="Calories" min="1" required>
+        <button type="submit">Add Food</button>
+    </form>
+
+    <div class="total">
+        Total calories today: <strong>{{ total_calories }}</strong>
+    </div>
+
+    {% if foods %}
+        <ul class="food-list">
+            {% for food in foods %}
+                <li>
+                    <span>{{ food.name }} - {{ food.calories }} calories</span>
+                    <a href="{% url 'delete_food' food.id %}">Remove</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a class="reset" href="{% url 'reset_foods' %}">Reset Day</a>
+    {% else %}
+        <p class="empty">No food added yet.</p>
+    {% endif %}
+</section>
+{% endblock %}
